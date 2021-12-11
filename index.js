@@ -18,7 +18,7 @@ app
     .get('/test/', async r => {
     try{
         const { URL } = r.query;
-        const browser = await puppeteer.launch();
+        const browser = await puppeteer.launch({ignoreDefaultArgs: ['--disable-extensions']});
         const page = await browser.newPage();
         await page.goto(URL, { waitUntil: 'networkidle2' });
         await page.click('#bt');
