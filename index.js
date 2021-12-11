@@ -18,12 +18,17 @@ app
     .get('/test/', async r => {
     try{
         const { URL } = r.query;
-        const browser = await puppeteer.launch({  headless: true,ignoreDefaultArgs: ['--disable-extensions']});
-        const page = await browser.newPage();
-        await page.goto(URL, { waitUntil: 'networkidle2' });
-        await page.click('#bt');
-        const input = document.querySelector('#inp').value;
-        r.res.send(input);}
+          const browser = await puppeteer.launch({headless: true, args:['--no-sandbox','--disable-setuid-sandbox']});
+            const page = await browser.newPage();
+                  await page.goto(URL, { waitUntil: 'networkidle2' });
+                  await page.click('#bt');
+                  const input = await page.$eval('#inp',el=>el.value);
+                  console.log(input);
+                  browser.close()
+              
+                 //  await page.click('#bt');
+                 //     const input = document.querySelector('#inp').value;
+                  r.res.send(input);}
     catch(e){console.log(`catch error ${e}`);}
     })
   .listen(PORT,()=>console.log(`SERVER is linsteing on ${PORT}`))
